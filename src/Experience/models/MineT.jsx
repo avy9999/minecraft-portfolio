@@ -71,7 +71,13 @@ export default function Model(props) {
       <mesh geometry={nodes['minecraft_block-large_fern_bottom'].geometry} material={materials['minecraft_block-large_fern_bottom']} position={[19.878, 7.428, 50.441]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-large_fern_top'].geometry} material={materials['minecraft_block-large_fern_top']} position={[19.878, 8.428, 50.447]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-light_gray_wool'].geometry} material={materials['minecraft_block-light_gray_wool']} position={[8.832, -3.176, 7.28]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_block-medium_amethyst_bud'].geometry} material={materials['minecraft_block-medium_amethyst_bud']} position={[2.386, 2.327, 9.653]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh
+        visible={false}
+        geometry={nodes['minecraft_block-medium_amethyst_bud'].geometry}
+        material={materials['minecraft_block-medium_amethyst_bud']}
+        position={[2.386, 2.327, 9.653]}
+        rotation={[1.576, 0.001, 1.574]}
+      />
       <mesh geometry={nodes['minecraft_block-oak_leaves'].geometry} material={materials['minecraft_block-oak_leaves']} position={[-32.334, 16.029, -39.578]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-oak_log'].geometry} material={materials['minecraft_block-oak_log']} position={[-31.424, 14.726, -40.075]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-oak_log_top'].geometry} material={materials['minecraft_block-oak_log_top']} position={[-31.407, 17.279, -40.878]} rotation={[1.576, 0.001, 1.574]} />

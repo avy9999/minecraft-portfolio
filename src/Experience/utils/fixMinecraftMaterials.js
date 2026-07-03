@@ -49,6 +49,7 @@ export function fixMinecraftMaterials(materials) {
     Object.entries(materials).forEach(([name, mat]) => {
 
     const n = name.toLowerCase();
+    
 
         // Only modify Minecraft materials
         const isMinecraft = n.startsWith("minecraft_");
@@ -89,7 +90,6 @@ export function fixMinecraftMaterials(materials) {
         // ---------------------------------
 
         if (CUTOUT.some(x => n.includes(x))) {
-
             mat.transparent = false;
 
             mat.alphaTest = 0.5;
