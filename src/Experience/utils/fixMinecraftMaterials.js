@@ -18,7 +18,6 @@ const CUTOUT = [
     "amethyst",
     "bud",
 
-    // Added
     "allium",
     "azalea",
     "flowering_azalea",
@@ -28,7 +27,7 @@ const CUTOUT = [
 
     "item_frame",
 
-    // Your custom images
+    // custom UI textures
     "face",
     "about",
     "projects",
@@ -46,28 +45,100 @@ const TRANSPARENT = [
 ];
 
 export function fixMinecraftMaterials(materials) {
+
     Object.entries(materials).forEach(([name, mat]) => {
 
-    const n = name.toLowerCase();
-    
+        const n = name.toLowerCase();
 
-        // Only modify Minecraft materials
         const isMinecraft = n.startsWith("minecraft_");
         const isCustomCutout = CUTOUT.some(x => n.includes(x));
 
-        if (!isMinecraft && !isCustomCutout) {
-            return;
-        }
+        if (!isMinecraft && !isCustomCutout) return;
 
-        // Always use sRGB textures
+        // -----------------------------
+        // texture color space fix
+        // -----------------------------
         if (mat.map) {
             mat.map.colorSpace = THREE.SRGBColorSpace;
         }
 
-        // ---------------------------------
-        // Transparent
-        // ---------------------------------
+        // -----------------------------
+        // GRASS (SPECIAL CASE)
+        // -----------------------------
+        if (n.includes("grass")) {
 
+            mat.color = new THREE.Color().offsetHSL(
+                0,
+                0,
+                (Math.random() - 0.5) * 0.06
+            );
+
+            mat.transparent = false;
+            mat.alphaTest = 0.5;
+
+            mat.side = THREE.FrontSide;
+
+            mat.roughness = 1;
+            mat.metalness = 0;
+            mat.envMapIntensity = 0.2;
+
+            mat.depthWrite = true;
+            mat.depthTest = true;
+
+            mat.needsUpdate = true;
+
+            return;
+        }
+
+        if (n.includes("water")) {
+
+            mat.transparent = true;
+            mat.opacity = 0.85;
+
+            mat.alphaTest = 0;
+
+            mat.depthWrite = false;   // CRITICAL
+            mat.depthTest = true;
+
+            mat.side = THREE.FrontSide;
+
+            mat.blending = THREE.NormalBlending;
+
+            mat.roughness = 0;
+            mat.metalness = 0;
+
+            mat.envMapIntensity = 0.3;
+
+            mat.needsUpdate = true;
+
+            return;
+        }
+
+        // -----------------------------
+        // CLOUDS (SPECIAL CASE)
+        // -----------------------------
+        if (n.includes("cloud")) {
+
+            mat.transparent = true;
+            mat.opacity = 0.85;
+
+            mat.alphaTest = 0.2;
+
+            mat.depthWrite = false;
+            mat.depthTest = true;
+
+            mat.side = THREE.FrontSide;
+
+            mat.envMapIntensity = 0.1;
+
+            mat.needsUpdate = true;
+
+            return;
+        }
+
+        // -----------------------------
+        // TRANSPARENT BLOCKS
+        // -----------------------------
         if (TRANSPARENT.some(x => n.includes(x))) {
 
             mat.transparent = true;
@@ -85,40 +156,60 @@ export function fixMinecraftMaterials(materials) {
             return;
         }
 
-        // ---------------------------------
-        // Cutout
-        // ---------------------------------
-
+        // -----------------------------
+        // CUTOUT BLOCKS
+        // -----------------------------
         if (CUTOUT.some(x => n.includes(x))) {
-            mat.transparent = false;
 
+            mat.transparent = false;
             mat.alphaTest = 0.5;
 
             mat.depthWrite = true;
             mat.depthTest = true;
 
-            mat.side = THREE.DoubleSide;
+            // 🌸 FIX: flowers need DoubleSide, others not
+            if (
+                n.includes("flower") ||
+                n.includes("orchid") ||
+                n.includes("tulip") ||
+                n.includes("poppy") ||
+                n.includes("allium")
+            ) {
+                mat.side = THREE.DoubleSide;
+            } else {
+                mat.side = THREE.FrontSide;
+            }
 
             mat.needsUpdate = true;
-
             return;
         }
 
-        // ---------------------------------
-        // Opaque
-        // ---------------------------------
+        // -----------------------------
+        // OPAQUE BLOCK (IMPROVED DEPTH SYSTEM)
+        // -----------------------------
 
         mat.transparent = false;
-
         mat.alphaTest = 0;
+
+        mat.roughness = 1;
+        mat.metalness = 0;
+        mat.envMapIntensity = 0.25;
 
         mat.depthWrite = true;
         mat.depthTest = true;
 
         mat.side = THREE.DoubleSide;
 
+        // 🌍 SAFE DEPTH VARIATION (texture-preserving)
+        if (mat.map) {
+
+            // subtle brightness shift (DO NOT overwrite color)
+            const brightness = 0.92 + Math.random() * 0.08;
+
+            mat.color = mat.color.clone().multiplyScalar(brightness);
+        }
+
         mat.needsUpdate = true;
 
     });
-
 }

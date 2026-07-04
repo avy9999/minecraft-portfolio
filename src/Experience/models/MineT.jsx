@@ -4,20 +4,36 @@ Command: npx gltfjsx@6.5.3 mineT.glb --transform -d
 Files: mineT.glb [3.99MB] > C:\Users\Aryan Gupta\Downloads\Minecraft Portfolio\mineT-transformed.glb [847.23KB] (79%)
 */
 
-import { React, useEffect} from 'react'
+import { React, useEffect, useRef} from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useGLTFWithKTX2 } from '../utils/useGLTFWithKTX2';
 import { fixMinecraftMaterials } from '../utils/fixMinecraftMaterials';
 
-export default function Model(props) {
-  const { nodes, materials } = useGLTFWithKTX2('/mineT-transformed.glb')
+export default function Model({progress = 0, ...props}) {
+  const { nodes, materials } = useGLTFWithKTX2('/mineT-v1.glb');
   useEffect(() => {
     fixMinecraftMaterials(materials);
 }, [materials]);
+
   return (
     <group {...props} dispose={null}>
+      <group position={[286.5, 127.5, 152.5]}>
+        <mesh geometry={nodes['minecraft_entity-signs-birch001'].geometry} material={materials['minecraft_entity-signs-birch.001']} position={[-281.642, -128.149, -146.856]} rotation={[1.576, 0.001, 1.574]} />
+      </group>
+      <group position={[286.5, 127.5, 152.5]}>
+        <mesh geometry={nodes['minecraft_entity-signs-birch002'].geometry} material={materials['minecraft_entity-signs-birch.002']} position={[-281.642, -128.149, -146.856]} rotation={[1.576, 0.001, 1.574]} />
+      </group>
+      <group position={[286.5, 127.5, 152.5]}>
+        <mesh geometry={nodes['minecraft_entity-signs-oak001'].geometry} material={materials['minecraft_entity-signs-oak.001']} position={[-285.408, -125.982, -144.651]} rotation={[1.576, 0.001, 1.574]} />
+      </group>
       <mesh geometry={nodes.clouds.geometry} material={materials.Could} position={[14.743, 74.481, -12.876]} rotation={[2.968, -1.568, 2.962]} scale={189.008} />
       <mesh geometry={nodes.Text.geometry} material={materials['Material.001']} position={[-7.019, 3.324, 5.891]} rotation={[Math.PI / 2, 0, -Math.PI / 2]} scale={0.113} />
+      <mesh geometry={nodes.Text001.geometry} material={materials.Material} position={[-0.63, 3.41, 10.027]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.11} />
+      <mesh geometry={nodes.Text002.geometry} material={materials['Material.002']} position={[4.756, -0.651, 4.324]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.102} />
+      <mesh geometry={nodes.Text003.geometry} material={materials['Material.003']} position={[4.736, -0.651, 6.474]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.102} />
+      <mesh geometry={nodes.Text004.geometry} material={materials['Material.004']} position={[4.736, -0.651, 5.394]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.102} />
+      <mesh geometry={nodes.Text005.geometry} material={materials['Material.005']} position={[5.991, -0.67, 6.959]} rotation={[Math.PI / 2, 0, -Math.PI / 2]} scale={0.097} />
+      <mesh geometry={nodes.Text006.geometry} material={materials['Material.006']} position={[5.991, -0.67, 6.029]} rotation={[Math.PI / 2, 0, -Math.PI / 2]} scale={0.097} />
       <mesh geometry={nodes.Cube005.geometry} material={materials.face} position={[-7.142, 2.349, 5.66]} scale={[0.081, 0.532, 0.532]} />
       <mesh geometry={nodes.Cube006.geometry} material={materials.connect} position={[-0.618, 2.321, 10.134]} rotation={[0, 0, -Math.PI]} scale={[-0.36, -0.36, -0.03]} />
       <mesh geometry={nodes.Cube002.geometry} material={materials.exp} position={[4.873, -1.647, 4.636]} scale={[0.026, 0.424, 0.424]} />
@@ -27,13 +43,12 @@ export default function Model(props) {
       <mesh geometry={nodes.Cube001.geometry} material={materials['achieve.001']} position={[5.967, -1.655, 5.631]} scale={[0.035, 0.395, 0.395]} />
       <mesh geometry={nodes.Text007.geometry} material={materials['Material.015']} position={[-9.121, 2.944, 7.493]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.259} />
       <mesh geometry={nodes['minecraft_block-allium'].geometry} material={materials['minecraft_block-allium']} position={[-14.609, 0.452, 8.092]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_block-red_tulip'].geometry} material={materials['minecraft_block-red_tulip']} position={[12.395, -1.529, 7.161]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-andesite'].geometry} material={materials['minecraft_block-andesite']} position={[-6.021, -9.045, -2.416]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-azalea_leaves'].geometry} material={materials['minecraft_block-azalea_leaves']} position={[6.393, 2.843, 7.168]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-beehive_end'].geometry} material={materials['minecraft_block-beehive_end']} position={[13.396, -3.153, 7.155]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-beehive_front'].geometry} material={materials['minecraft_block-beehive_front']} position={[12.896, -2.653, 7.156]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-beehive_side'].geometry} material={materials['minecraft_block-beehive_side']} position={[13.896, -2.653, 7.159]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_block-black_stained_glass'].geometry} material={materials['minecraft_block-black_stained_glass']} position={[-0.035, 3.055, 7.007]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_block-black_stained_glass'].geometry} material={materials['minecraft_block-black_stained_glass']} position={[-0.035, 3.055, 7.007]} rotation={[1.576, 0.001, 1.574]} renderOrder={10} />
       <mesh geometry={nodes['minecraft_block-black_wool'].geometry} material={materials['minecraft_block-black_wool']} position={[-12.611, 3.859, 8.117]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-blue_orchid'].geometry} material={materials['minecraft_block-blue_orchid']} position={[-5.606, 0.794, 7.287]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-bookshelf'].geometry} material={materials['minecraft_block-bookshelf']} position={[13.395, -0.903, 7.168]} rotation={[1.576, 0.001, 1.574]} />
@@ -71,13 +86,7 @@ export default function Model(props) {
       <mesh geometry={nodes['minecraft_block-large_fern_bottom'].geometry} material={materials['minecraft_block-large_fern_bottom']} position={[19.878, 7.428, 50.441]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-large_fern_top'].geometry} material={materials['minecraft_block-large_fern_top']} position={[19.878, 8.428, 50.447]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-light_gray_wool'].geometry} material={materials['minecraft_block-light_gray_wool']} position={[8.832, -3.176, 7.28]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh
-        visible={false}
-        geometry={nodes['minecraft_block-medium_amethyst_bud'].geometry}
-        material={materials['minecraft_block-medium_amethyst_bud']}
-        position={[2.386, 2.327, 9.653]}
-        rotation={[1.576, 0.001, 1.574]}
-      />
+      <mesh visible={false} geometry={nodes['minecraft_block-medium_amethyst_bud'].geometry} material={materials['minecraft_block-medium_amethyst_bud']} position={[2.386, 2.327, 9.653]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-oak_leaves'].geometry} material={materials['minecraft_block-oak_leaves']} position={[-32.334, 16.029, -39.578]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-oak_log'].geometry} material={materials['minecraft_block-oak_log']} position={[-31.424, 14.726, -40.075]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-oak_log_top'].geometry} material={materials['minecraft_block-oak_log_top']} position={[-31.407, 17.279, -40.878]} rotation={[1.576, 0.001, 1.574]} />
@@ -94,7 +103,9 @@ export default function Model(props) {
       <mesh geometry={nodes['minecraft_block-potted_flowering_azalea_bush_top'].geometry} material={materials['minecraft_block-potted_flowering_azalea_bush_top']} position={[2.726, 2.838, 7.157]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-quartz_block_bottom'].geometry} material={materials['minecraft_block-quartz_block_bottom']} position={[2.884, 0.142, 7.061]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-quartz_block_side'].geometry} material={materials['minecraft_block-quartz_block_side']} position={[1.925, -2.017, 7.551]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_block-quartz_block_top'].geometry} material={materials['minecraft_block-quartz_block_top']} position={[0.768, -1.915, 8.124]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-red_sandstone_top'].geometry} material={materials['minecraft_block-red_sandstone_top']} position={[-5.341, 1.41, 5.505]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_block-red_tulip'].geometry} material={materials['minecraft_block-red_tulip']} position={[12.395, -1.529, 7.161]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-sand'].geometry} material={materials['minecraft_block-sand']} position={[1.204, -0.731, -6.993]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-sandstone'].geometry} material={materials['minecraft_block-sandstone']} position={[-13.149, 0.368, -15.023]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-sandstone_bottom'].geometry} material={materials['minecraft_block-sandstone_bottom']} position={[-10.714, -0.045, -8.712]} rotation={[1.576, 0.001, 1.574]} />
@@ -114,12 +125,12 @@ export default function Model(props) {
       <mesh geometry={nodes['minecraft_block-tall_seagrass_top'].geometry} material={materials['minecraft_block-tall_seagrass_top']} position={[3.604, -8.633, -8.033]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-torchflower'].geometry} material={materials['minecraft_block-torchflower']} position={[3.386, 2.452, 9.657]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-warped_roots_pot'].geometry} material={materials['minecraft_block-warped_roots_pot']} position={[6.395, 2.471, 6.666]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_block-water_still'].geometry} material={materials['minecraft_block-water_still']} position={[5.36, -6.986, 3.229]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_block-water_still'].geometry} material={materials['minecraft_block-water_still']} position={[5.36, -6.986, 3.229]} rotation={[1.576, 0.001, 1.574]} renderOrder={5}/>
       <mesh geometry={nodes['minecraft_entity-armorstand-wood'].geometry} material={materials['minecraft_entity-armorstand-wood']} position={[8.388, -2.33, 9.645]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_entity-bed-red'].geometry} material={materials['minecraft_entity-bed-red']} position={[11.896, -2.994, 7.152]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_entity-chest-normal'].geometry} material={materials['minecraft_entity-chest-normal']} position={[6.554, -2.622, 6.637]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_entity-signs-birch'].geometry} material={materials['minecraft_entity-signs-birch.001']} position={[4.858, -0.649, 5.644]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_entity-signs-oak'].geometry} material={materials['minecraft_entity-signs-oak.001']} position={[1.092, 1.518, 7.849]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_entity-signs-birch'].geometry} material={materials['minecraft_entity-signs-birch']} position={[4.858, -0.649, 5.644]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_entity-signs-oak'].geometry} material={materials['minecraft_entity-signs-oak']} position={[1.092, 1.518, 7.849]} rotation={[1.576, 0.001, 1.574]} />
     </group>
   )
 }

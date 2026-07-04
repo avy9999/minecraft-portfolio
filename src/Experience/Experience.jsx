@@ -6,7 +6,11 @@ import { CameraControls, OrbitControls, Environment, View, PerspectiveCamera, us
 import * as THREE from "three";
 
 import Model from "./models/MineT";
+import cameraKeyframes from "../data/cameraKeyframes.json";
 
+const CAMERA_POS_SMOOTH = 0.08;
+const CAMERA_ROT_SMOOTH = 0.08;
+const MOUSE_SMOOTH = 0.12;
 
 const CameraHelper = ({cameraRef}) => {
     useHelper(cameraRef, THREE.CameraHelper);
@@ -26,141 +30,125 @@ const DebugCurve = ({curve}) =>{
 }
 
 const Scene = ({
-    camera, 
+    camera,
     scrollProgress,
     setscrollProgress,
     targetScrollProgress,
-    lerpFactor}) => {
-    const cameraCurve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(-19, 2, 8),
-        new THREE.Vector3(-17, 2, 8),
-        new THREE.Vector3(-13, 2, 8),
-        new THREE.Vector3(-12, 2, 8), //open door
-        new THREE.Vector3(-7, 2, 8),
-        new THREE.Vector3(-5, 3, 8),
-        new THREE.Vector3(-4, 3, 5),
-        new THREE.Vector3(0, 0, 5),
-        new THREE.Vector3(2, -0.6, 5),
-        new THREE.Vector3(2, -0.6, 7),
-        new THREE.Vector3(2, -1, 9), //2nd door
-        new THREE.Vector3(5.6, -1.5, 8.4),
-        new THREE.Vector3(7, -1.3, 9),
-        new THREE.Vector3(9, -1.3, 6),
-        new THREE.Vector3(7, -1.3, 9),
-        new THREE.Vector3(5.6, -1.5, 8.4),
-        new THREE.Vector3(2, -1, 9),
-        new THREE.Vector3(2, -0.6, 7),
-        new THREE.Vector3(2, -0.6, 5),
-        new THREE.Vector3(0, 0, 5),
-        new THREE.Vector3(-3.9, 2.5, 7.6),
-        new THREE.Vector3(3.7, 2.6, 8.2),
-        new THREE.Vector3(7.4, 2.6, 7.5),
-        new THREE.Vector3(7.4, 2.6, 8.5),
-        new THREE.Vector3(3.7, 2.6, 8.2),
-        new THREE.Vector3(-0.6, 3, 8),
+    lerpFactor,
+    recordMode,
+    mouseOffset
+}) => {
+    const getInterpolatedFrame = (progress) => {
 
-        new THREE.Vector3(-13, 2, 8),
-        new THREE.Vector3(-17, 2, 8),
-        new THREE.Vector3(-19, 2, 8),
-        
-    ]);
+        if (!cameraKeyframes.length) return null;
 
-    const rotationTargets = [
-        {progress: 0, rotation: new THREE.Euler(-1.85,-1.47,-1.85)},
-        {progress: 0.1, rotation: new THREE.Euler(-1.87, -1.49, -1.87)},
-        {progress: 0.17, rotation: new THREE.Euler(-0.34, -0.92, -0.27)},
-        {progress: 0.19, rotation: new THREE.Euler(-0.25, 0.03, 0.01)},
-        {progress: 0.20, rotation: new THREE.Euler(-1.68, 1.32, 1.69)},
-        {progress: 0.22, rotation: new THREE.Euler(-2.92, -0.19,-3.09)},
-        {progress: 0.25, rotation: new THREE.Euler(-1.65, -1.24, -1.66)},
-        {progress: 0.3, rotation: new THREE.Euler(-1.72, -1.39, -1.73)},
-        {progress: 0.37, rotation: new THREE.Euler(-1.47, -1.24, -1.47)},
-        {progress: 0.4, rotation: new THREE.Euler(-2.03, -1.37, -2.04)},
-        {progress: 0.44, rotation: new THREE.Euler(-0.18, -0.46, -0.08)},
-        {progress: 0.47, rotation: new THREE.Euler(-0.18, 0.38, 0.07)},
-        {progress: 0.47, rotation: new THREE.Euler(-1.66, 1.42, 1.66)},
-        {progress: 0.48, rotation: new THREE.Euler(-2.76, 1.19, 2.78)},
-        {progress: 0.52, rotation: new THREE.Euler(-1.69, 1.37, 1.69)},
-        {progress: 0.55, rotation: new THREE.Euler(-0.40, 1.26, 0.38)},
-        {progress: 0.58, rotation: new THREE.Euler(-0.18, -0.45, -0.08)},
-        {progress: 0.61, rotation: new THREE.Euler(-0.16, 0.63, 0.09)},
-        {progress: 0.64, rotation: new THREE.Euler(1.28, 1.44, -1.28)},
-        {progress: 0.70, rotation: new THREE.Euler(-3.07, 0.54, 3.10)},
-        {progress: 0.71, rotation: new THREE.Euler(-2.54, -1.06, -2.59)},
-        {progress: 0.73, rotation: new THREE.Euler(-1.69, -1.27, -1.70)},
-        {progress: 0.76, rotation: new THREE.Euler(-2.82, -1.08, -2.85)},
-        {progress: 0.78, rotation: new THREE.Euler(-0.61, -1.21, -0.57)},
-        {progress: 0.82, rotation: new THREE.Euler(-0.17, 0.56, 0.09)},
-        {progress: 0.76, rotation: new THREE.Euler(-1.42, 1.35, 1.42)},
-        {progress: 0.74, rotation: new THREE.Euler(-3.05, 1.17, 3.05)},
-        {progress: 0.73, rotation: new THREE.Euler(-3.00, 0.33, 3.09)},
-        {progress: 0.72, rotation: new THREE.Euler(-2.98, -0.85, -3.02)},
-        {progress: 0.71, rotation: new THREE.Euler(-2.76, -1.42, -2.77)},
-        {progress: 0.90, rotation: new THREE.Euler(-2.85, -1.49, -2.85)}
-    ];
+        for (let i = 0; i < cameraKeyframes.length - 1; i++) {
 
-    const getLerpedRotation = (progress) => {
-        for (let i = 0; i < rotationTargets.length - 1; i++){
-            const start = rotationTargets[i];
-            const end = rotationTargets[i+1];
+            const start = cameraKeyframes[i];
+            const end = cameraKeyframes[i + 1];
 
-            if (progress >= start.progress && progress <= end.progress){
-                const lerpFactor = (progress-start.progress) / (end.progress - start.progress);
-                return new THREE.Euler(
-                    THREE.MathUtils.lerp(start.rotation.x, end.rotation.x, lerpFactor),
-                    THREE.MathUtils.lerp(start.rotation.y, end.rotation.y, lerpFactor),
-                    THREE.MathUtils.lerp(start.rotation.z, end.rotation.z, lerpFactor)
-                );
+            if (progress >= start.progress && progress <= end.progress) {
+
+                const t =
+                    (progress - start.progress) /
+                    (end.progress - start.progress);
+
+                return {
+                    position: new THREE.Vector3().lerpVectors(
+                        new THREE.Vector3(...start.position),
+                        new THREE.Vector3(...end.position),
+                        t
+                    ),
+
+                    quaternion: new THREE.Quaternion()
+                        .copy(new THREE.Quaternion(...start.quaternion))
+                        .slerp(
+                            new THREE.Quaternion(...end.quaternion),
+                            t
+                        )
+                };
             }
         }
-    }
 
-    useFrame(()=>{
-        if (camera){
-            // console.log("position");
-            // console.log(camera.current.position);
+        const last = cameraKeyframes[cameraKeyframes.length - 1];
 
-            // const newProgress = THREE.MathUtils.lerp(scrollProgress, targetScrollProgress.current, lerpFactor);
+        return {
+            position: new THREE.Vector3(...last.position),
+            quaternion: new THREE.Quaternion(...last.quaternion)
+        };
+    };
 
-            // setscrollProgress(newProgress);
+    useFrame(() => {
 
-            // const point = cameraCurve.getPoint(newProgress);
+        if (!camera?.current) return;
 
-            // camera.current.position.copy(point);
 
-            const newProgress = THREE.MathUtils.clamp(
-                THREE.MathUtils.lerp(
-                    scrollProgress,
-                    targetScrollProgress.current,
-                    lerpFactor
-                ),
-                0,
-                1
-            );
+        const newProgress = THREE.MathUtils.clamp(
+            THREE.MathUtils.lerp(
+                scrollProgress,
+                targetScrollProgress.current,
+                lerpFactor
+            ),
+            0,
+            1
+        );
 
-            setscrollProgress(newProgress);
+        setscrollProgress(newProgress);
 
-            console.log("newProgress");
-            console.log(newProgress);
-            console.log("rotation");
-            console.log(camera.current.rotation);
+        // console.log("newProgress");        
+        // console.log(newProgress);        
+        // console.log("rotation");
+        // console.log(camera.current.rotation);
 
-            const point = cameraCurve.getPoint(newProgress);
+        const frame = getInterpolatedFrame(newProgress);
 
-            if (point && camera.current) {
-                camera.current.position.copy(point);
-            }
+        if (!frame) return;
 
-            const targetRotation = getLerpedRotation(newProgress);
+        const finalPosition = frame.position.clone();
 
-            if (targetRotation) {
-                camera.current.rotation.copy(targetRotation);
-            }
+        // smooth mouse offset
+        const offsetX = THREE.MathUtils.lerp(
+            camera.current.userData.offsetX || 0,
+            mouseOffset.current.x,
+            MOUSE_SMOOTH
+        );
+
+        const offsetY = THREE.MathUtils.lerp(
+            camera.current.userData.offsetY || 0,
+            mouseOffset.current.y,
+            MOUSE_SMOOTH
+        );
+
+        camera.current.userData.offsetX = offsetX;
+        camera.current.userData.offsetY = offsetY;
+
+        finalPosition.add(new THREE.Vector3(offsetX, offsetY, 0));
+
+        // POSITION smoothing
+        camera.current.position.lerp(finalPosition, CAMERA_POS_SMOOTH);
+
+        // ROTATION smoothing (IMPORTANT FIX)
+        if (!recordMode) {
+            camera.current.quaternion.slerp(frame.quaternion, CAMERA_ROT_SMOOTH);
         }
     });
     return (
         <>
-        <DebugCurve curve={cameraCurve}/>
+        <directionalLight
+        position={[20, 30, -10]}
+        intensity={1.8}
+        color={"#ffb37a"}
+        castShadow
+        />
+
+        <ambientLight intensity={0.25} color={"#ffe0c2"} />
+
+        <hemisphereLight
+        skyColor={"#ffd7b0"}
+        groundColor={"#2b1b12"}
+        intensity={0.4}
+        />
+        {/* <DebugCurve curve={cameraCurve}/> */}
         <Environment
         background
 
@@ -174,9 +162,10 @@ const Scene = ({
             '/cubemap/pz.webp',
             '/cubemap/nz.webp',
         ]}
+        environmentIntensity={0.8}
         />
         <Suspense fallback={null}>
-            <Model />
+            <Model progress={scrollProgress}/>
         </Suspense>
         </>
     );
@@ -184,26 +173,30 @@ const Scene = ({
 
 const Experience = () => {
     const controls1 = useRef();
+    const RECORD_MODE = false;
     const camera1 = useRef();
 
     const [scrollProgress, setscrollProgress] = useState(0);
     const scrollSpeed = 0.00005;
     const targetScrollProgress = useRef(0);
-    const lerpFactor = 0.1;
+    const lerpFactor = 0.03;
 
     const isSwiping = useRef(false);
+    const mouseOffset = useRef(new THREE.Vector3());
+
 
     useEffect(() => {
-        // const handleWheel = (e) => {
-        //     targetScrollProgress.current = targetScrollProgress.current + (e.deltaY) * scrollSpeed;
-        // }
 
         const handleWheel = (e) => {
             targetScrollProgress.current = THREE.MathUtils.clamp(
-                targetScrollProgress.current + e.deltaY * scrollSpeed,
+                targetScrollProgress.current + e.deltaY * scrollSpeed * 0.5,
                 0,
                 1
             );
+        };
+
+        const handlePointerDown = () => {
+            isSwiping.current = true;
         };
 
         const handlePointerMove = (e) => {
@@ -216,44 +209,61 @@ const Experience = () => {
             );
         };
 
-        const handlePointerDown = ()=>{
-            isSwiping.current = true;
-        }
-
-        // const handlePointerMove = (e)=>{
-        //     if (!isSwiping.current) return;
-        //     targetScrollProgress.current = targetScrollProgress.current + (e.movementY) * scrollSpeed;
-        // }
-
-        const handlePointerUp = ()=>{
+        const handlePointerUp = () => {
             isSwiping.current = false;
-        }
+        };
+
+        const handleMouseMove = (e) => {
+            const mouseX = (e.clientX / window.innerWidth) *2 -1;
+            const mouseY = (e.clientY / window.innerHeight) *2 -1;
+
+            const sensitivityX = 0.2;
+            const sensitivityY = 0.2;
+
+            mouseOffset.current.x = mouseX * sensitivityX;
+            mouseOffset.current.y = mouseY * sensitivityY;
+        };
 
         window.addEventListener("wheel", handleWheel);
+        window.addEventListener("mousemove", handleMouseMove);
         // window.addEventListener("pointerdown", handlePointerDown);
         // window.addEventListener("pointermove", handlePointerMove);
         // window.addEventListener("pointerup", handlePointerUp);
 
-        return () =>{
+        return () => {
             window.removeEventListener("wheel", handleWheel);
+            window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("pointerdown", handlePointerDown);
             window.removeEventListener("pointermove", handlePointerMove);
             window.removeEventListener("pointerup", handlePointerUp);
-        }
+        };
+
     }, []);
 
   return (
     <>
     {/* <CameraControls ref={controls}/> */}
         <Canvas
+        gl={{
+        toneMapping: THREE.ACESFilmicToneMapping,
+        toneMappingExposure: 1.15
+        }}
         eventSource={document.getElementById("root")}>
-            <Scene camera={camera1}
-            scrollProgress = {scrollProgress}
-            setscrollProgress = {setscrollProgress}
-            targetScrollProgress = {targetScrollProgress}
-            lerpFactor = {lerpFactor}/>
+            <fog attach="fog" args={["#f6d6b8", 60, 140]} />
+            <Scene
+                camera={camera1}
+                scrollProgress={scrollProgress}
+                setscrollProgress={setscrollProgress}
+                targetScrollProgress={targetScrollProgress}
+                lerpFactor={lerpFactor}
+                recordMode={RECORD_MODE}
+                mouseOffset={mouseOffset}
+            />
             <PerspectiveCamera ref={camera1} makeDefault fov={70} position={[0, 5, 0]}/>
-            <OrbitControls ref={controls1}/>
+            <OrbitControls
+                ref={controls1}
+                enabled={RECORD_MODE}
+            />
         </Canvas>
     </>
   );
