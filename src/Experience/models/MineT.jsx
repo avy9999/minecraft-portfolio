@@ -4,13 +4,50 @@ Command: npx gltfjsx@6.5.3 mineT.glb --transform -d
 Files: mineT.glb [3.99MB] > C:\Users\Aryan Gupta\Downloads\Minecraft Portfolio\mineT-transformed.glb [847.23KB] (79%)
 */
 
-import { React, useEffect, useRef} from 'react'
+import { React, useEffect, useRef, useState, useMemo} from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useGLTFWithKTX2 } from '../utils/useGLTFWithKTX2';
 import { fixMinecraftMaterials } from '../utils/fixMinecraftMaterials';
+import * as THREE from "three";
 
-export default function Model({progress = 0, ...props}) {
+export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
   const { nodes, materials } = useGLTFWithKTX2('/mineT-v1.glb');
+  const [hoveredMesh, setHoveredMesh] = useState(null);
+  const getMaterial = (elementID, progressRange, originalMaterial) => {
+    const mat = originalMaterial;
+
+    if (!mat.emissive) {
+      mat.emissive = new THREE.Color(0x000000);
+    }
+
+    const [min, max] = progressRange;
+
+    const isHovering = hoveredMesh !== null;
+
+    let intensity = 0.05;
+
+    // 🌑 STEP 1: dim everything FIRST if something is hovered
+    if (isHovering) {
+      intensity = 0.2 + pulseIntensity * 0.2;
+    }
+
+    // 🌟 STEP 2: override hovered element
+    if (hoveredMesh === elementID) {
+      intensity = 0.9;
+    }
+
+    // 🌊 STEP 3: pulse overrides only if NOT hovered
+    else if (!isHovering && progress >= min && progress <= max) {
+      intensity = 0.3 + pulseIntensity * 0.5;
+    }
+
+    // ✨ keep subtle base glow
+    mat.emissive.setRGB(0.1, 0.1, 0.1);
+    mat.emissiveIntensity = intensity;
+
+    return mat;
+  };
+
   useEffect(() => {
     fixMinecraftMaterials(materials);
 }, [materials]);
@@ -34,13 +71,69 @@ export default function Model({progress = 0, ...props}) {
       <mesh geometry={nodes.Text004.geometry} material={materials['Material.004']} position={[4.736, -0.651, 5.394]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.102} />
       <mesh geometry={nodes.Text005.geometry} material={materials['Material.005']} position={[5.991, -0.67, 6.959]} rotation={[Math.PI / 2, 0, -Math.PI / 2]} scale={0.097} />
       <mesh geometry={nodes.Text006.geometry} material={materials['Material.006']} position={[5.991, -0.67, 6.029]} rotation={[Math.PI / 2, 0, -Math.PI / 2]} scale={0.097} />
-      <mesh geometry={nodes.Cube005.geometry} material={materials.face} position={[-7.142, 2.349, 5.66]} scale={[0.081, 0.532, 0.532]} />
-      <mesh geometry={nodes.Cube006.geometry} material={materials.connect} position={[-0.618, 2.321, 10.134]} rotation={[0, 0, -Math.PI]} scale={[-0.36, -0.36, -0.03]} />
-      <mesh geometry={nodes.Cube002.geometry} material={materials.exp} position={[4.873, -1.647, 4.636]} scale={[0.026, 0.424, 0.424]} />
-      <mesh geometry={nodes.Cube003.geometry} material={materials.projects} position={[4.873, -1.647, 5.636]} scale={[0.026, 0.425, 0.425]} />
-      <mesh geometry={nodes.Cube004.geometry} material={materials.skills} position={[4.873, -1.647, 6.636]} scale={[0.026, 0.426, 0.426]} />
-      <mesh geometry={nodes.Cube.geometry} material={materials.achieve} position={[5.977, -1.655, 6.651]} scale={[0.035, 0.395, 0.395]} />
-      <mesh geometry={nodes.Cube001.geometry} material={materials['achieve.001']} position={[5.967, -1.655, 5.631]} scale={[0.035, 0.395, 0.395]} />
+      <mesh
+        geometry={nodes.Cube005.geometry}
+        material={getMaterial("face", [0, 1], materials.face)}
+        position={[-7.142, 2.349, 5.66]}
+        scale={[0.081, 0.532, 0.532]}
+        onPointerOver={() => setHoveredMesh("face")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
+
+      <mesh
+        geometry={nodes.Cube006.geometry}
+        material={getMaterial("connect", [0, 1], materials.connect)}
+        position={[-0.618, 2.321, 10.134]}
+        rotation={[0, 0, -Math.PI]}
+        scale={[-0.36, -0.36, -0.03]}
+        onPointerOver={() => setHoveredMesh("connect")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
+
+      <mesh
+        geometry={nodes.Cube002.geometry}
+        material={getMaterial("exp", [0, 1], materials.exp)}
+        position={[4.873, -1.647, 4.636]}
+        scale={[0.026, 0.424, 0.424]}
+        onPointerOver={() => setHoveredMesh("exp")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
+
+      <mesh
+        geometry={nodes.Cube003.geometry}
+        material={getMaterial("projects", [0, 1], materials.projects)}
+        position={[4.873, -1.647, 5.636]}
+        scale={[0.026, 0.425, 0.425]}
+        onPointerOver={() => setHoveredMesh("projects")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
+
+      <mesh
+        geometry={nodes.Cube004.geometry}
+        material={getMaterial("skills", [0, 1], materials.skills)}
+        position={[4.873, -1.647, 6.636]}
+        scale={[0.026, 0.426, 0.426]}
+        onPointerOver={() => setHoveredMesh("skills")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
+
+      <mesh
+        geometry={nodes.Cube.geometry}
+        material={getMaterial("achieve", [0, 1], materials.achieve)}
+        position={[5.977, -1.655, 6.651]}
+        scale={[0.035, 0.395, 0.395]}
+        onPointerOver={() => setHoveredMesh("achieve")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
+
+      <mesh
+        geometry={nodes.Cube001.geometry}
+        material={getMaterial("achieve2", [0, 1], materials['achieve.001'])}
+        position={[5.967, -1.655, 5.631]}
+        scale={[0.035, 0.395, 0.395]}
+        onPointerOver={() => setHoveredMesh("achieve2")}
+        onPointerOut={() => setHoveredMesh(null)}
+      />
       <mesh geometry={nodes.Text007.geometry} material={materials['Material.015']} position={[-9.121, 2.944, 7.493]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.259} />
       <mesh geometry={nodes['minecraft_block-allium'].geometry} material={materials['minecraft_block-allium']} position={[-14.609, 0.452, 8.092]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-andesite'].geometry} material={materials['minecraft_block-andesite']} position={[-6.021, -9.045, -2.416]} rotation={[1.576, 0.001, 1.574]} />
@@ -61,8 +154,8 @@ export default function Model({progress = 0, ...props}) {
       <mesh geometry={nodes['minecraft_block-composter_top'].geometry} material={materials['minecraft_block-composter_top']} position={[6.393, 1.843, 7.162]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-crafting_table_top'].geometry} material={materials['minecraft_block-crafting_table_top']} position={[-0.613, 0.825, 9.636]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-crimson_roots_pot'].geometry} material={materials['minecraft_block-crimson_roots_pot']} position={[6.398, 2.477, 5.666]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_block-dark_oak_door_bottom'].geometry} material={materials['minecraft_block-dark_oak_door_bottom']} position={[-2.928, -0.268, 8.322]} rotation={[1.576, 0.001, 1.574]} />
-      <mesh geometry={nodes['minecraft_block-dark_oak_door_top'].geometry} material={materials['minecraft_block-dark_oak_door_top']} position={[-2.929, 0.732, 8.328]} rotation={[1.576, 0.001, 1.574]} />
+      {/* <mesh geometry={nodes['minecraft_block-dark_oak_door_bottom'].geometry} material={materials['minecraft_block-dark_oak_door_bottom']} position={[-2.928, -0.268, 8.322]} rotation={[1.576, 0.001, 1.574]} />
+      <mesh geometry={nodes['minecraft_block-dark_oak_door_top'].geometry} material={materials['minecraft_block-dark_oak_door_top']} position={[-2.929, 0.732, 8.328]} rotation={[1.576, 0.001, 1.574]} /> */}
       <mesh geometry={nodes['minecraft_block-dark_oak_planks'].geometry} material={materials['minecraft_block-dark_oak_planks']} position={[-4.739, 2.375, 9.632]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-dark_oak_trapdoor'].geometry} material={materials['minecraft_block-dark_oak_trapdoor']} position={[5.39, 2.337, 8.162]} rotation={[1.576, 0.001, 1.574]} />
       <mesh geometry={nodes['minecraft_block-dirt'].geometry} material={materials['minecraft_block-dirt']} position={[5.909, 0.721, 21.283]} rotation={[1.576, 0.001, 1.574]} />

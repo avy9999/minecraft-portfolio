@@ -38,6 +38,7 @@ const Scene = ({
     recordMode,
     mouseOffset
 }) => {
+    const [pulseIntensity, setPulseIntensity] = useState(0);
     const getInterpolatedFrame = (progress) => {
 
         if (!cameraKeyframes.length) return null;
@@ -78,12 +79,14 @@ const Scene = ({
         };
     };
 
-    useFrame(() => {
+    useFrame((state) => {
 
         if (!camera?.current) return;
 
+        const newPulseIntensity = (Math.sin(state.clock.elapsedTime*3)+1)/2;
+        setPulseIntensity(newPulseIntensity);
 
-        const newProgress = THREE.MathUtils.clamp(
+        let newProgress = THREE.MathUtils.clamp(
             THREE.MathUtils.lerp(
                 scrollProgress,
                 targetScrollProgress.current,
@@ -92,6 +95,14 @@ const Scene = ({
             0,
             1
         );
+
+        if (newProgress > 1){
+            newProgress = 0;
+            targetScrollProgress.current = 0;
+        } else if(newProgress < 0){
+            newProgress = 1;
+            targetScrollProgress.current = 1;
+        }
 
         setscrollProgress(newProgress);
 
@@ -165,7 +176,7 @@ const Scene = ({
         environmentIntensity={0.8}
         />
         <Suspense fallback={null}>
-            <Model progress={scrollProgress}/>
+            <Model progress={scrollProgress} pulseIntensity={pulseIntensity}/>
         </Suspense>
         </>
     );
