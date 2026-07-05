@@ -8,6 +8,21 @@ import {
 const Projects = () => {
   const projects = [
     {
+      title: "Minecraft Portfolio",
+      description:
+        "An immersive Minecraft-inspired 3D portfolio built with React Three Fiber and Three.js. Explore a fully interactive world showcasing my projects, skills, and creativity through custom animations, smooth camera controls, and a unique game-like experience.",
+      image: "/images/minecraft-portfolio.webp",
+      github: "https://github.com/avy9999/minecraft-portfolio",
+      live: "https://avy-portfolio.vercel.app/",
+      tech: [
+        "React",
+        "Three.js",
+        "React Three Fiber",
+        "Blender",
+        "SCSS",
+      ],
+    },
+    {
       title: "Chess Engine",
       description:
         "A custom-built chess engine focused on move generation, board evaluation, and minimax-based decision making. Built for performance and future AI training integration.",
