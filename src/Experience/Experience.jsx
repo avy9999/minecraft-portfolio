@@ -20,7 +20,7 @@ const MOUSE_SMOOTH = 0.12;
 /* ---------------- CAMERA SCENE ---------------- */
 
 const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
-  const [pulseIntensity] = useState(0);
+  const [pulseIntensity, setPulseIntensity] = useState(0);
 
   const getInterpolatedFrame = (progress) => {
     if (!cameraKeyframes.length) return null;
@@ -57,6 +57,10 @@ const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
   };
 
   useFrame((state) => {
+    const newPulseIntensity =
+      (Math.sin(state.clock.elapsedTime * 3) + 1) / 2;
+
+    setPulseIntensity(newPulseIntensity);
     if (!camera?.current) return;
 
     /* ---------------- SMOOTH INFINITE SCROLL ---------------- */
@@ -137,7 +141,7 @@ const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
       <Suspense fallback={null}>
         <Model
           progress={progressRef.current.looped || 0}
-          pulseIntensity={1}
+          pulseIntensity={pulseIntensity}
         />
       </Suspense>
     </>
