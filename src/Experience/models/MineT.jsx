@@ -29,7 +29,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
       openModal("About me", <About/>, elementID);
     }
     else if(elementID === "connect"){
-      openModal("Connect Me 😊", <Connect/>, elementID);
+      openModal("Connect Me", <Connect/>, elementID);
     }
     else if(elementID === "exp"){
       openModal("Experiences", <Experiences/>, elementID);

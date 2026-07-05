@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./LoadingScreen.scss";
 
@@ -8,15 +8,18 @@ import Button from "../Button/Button";
 
 import { playSound, playBackgroundMusic } from "../../utils/audioSystem";
 import { useAudioStore } from "../../Experience/stores/audioStore";
+import { useToastStore } from "../../Experience/stores/toastStore";
 
 const LoadingScreen = () => {
   const { progress } = useProgress();
   const [isRevealed, setIsRevealed] = useState(false);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
   const { setIsAudioEnabled } = useAudioStore();
+  const { triggerAchievementToast } = useToastStore();
   const [localProgress, setLocalProgress] = useState(0);
   const [gifFinished, setGifFinished] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const toastTimerRef = useRef(null);
 
   useEffect(() => {
     const duration = 2500; // 2.5s
@@ -39,15 +42,28 @@ const LoadingScreen = () => {
     }, []);
 
   const handleReveal = () => {
-    setIsExiting(true); // 🔥 instantly remove UI
+    setIsExiting(true);
     setIsAudioEnabled(true);
+
     playBackgroundMusic();
     playSound("buttonClick");
 
+    toastTimerRef.current = setTimeout(() => {
+      triggerAchievementToast();
+    }, 1600);
+
     setTimeout(() => {
-        setIsRevealed(true); // background animation still happens
+      setIsRevealed(true);
     }, 50);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
     };
+  }, []);
 
   const handleAnimationFinished = () => {
     setIsAnimationFinished(true);
@@ -79,7 +95,11 @@ const LoadingScreen = () => {
                     </div>
 
                     <div className={`instructions-container ${isRevealed ? "revealed" : ""}`}>
-                    🖱️ Drag/Scroll Up/Down to Navigate~ 👈
+                      🖱️ Drag/Scroll Up/Down to Navigate~ 👈
+                    </div>
+
+                    <div className={`instructions-container ${isRevealed ? "revealed" : ""}`}>
+                      🖥️ Use a Computer for better experience~
                     </div>
                 </>
                 )}

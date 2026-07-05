@@ -12,6 +12,7 @@
   background-color: styles.$color-base-dark-gray;
 
   border: 2px solid styles.$color-base-dark-gray-four;
+  border-radius: 4px;
 
   box-shadow: inset 2px 2px #ffffffc0,
     inset -2px -2px #323232c0;
@@ -31,6 +32,7 @@
   color: black;
 
   border: 2px solid #000;
+  border-radius: 4px;
 
   box-shadow: inset 2px 2px #ffffff,
     inset -2px -2px #888;
@@ -90,4 +92,5 @@
   color: white;
 
   border: 1px solid #000;
+  border-radius: 4px;
 }

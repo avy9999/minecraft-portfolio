@@ -1,3 +1,5 @@
+@use "../../index.scss" as styles;
+
 .mc-toast {
   position: fixed;
   top: 20px;
@@ -10,42 +12,63 @@
 
   padding: 10px 12px;
 
-  background: #2b2b2b;
+  min-width: 260px;
+
+  background: styles.$color-base-dark-gray-three;
+
   border: 2px solid #000;
 
+  /* 🔥 Minecraft-style soft rounding (VERY subtle) */
+  border-radius: 4px;
+
   box-shadow:
-    inset 2px 2px #ffffff40,
-    inset -2px -2px #00000080,
-    0 4px 10px rgba(0, 0, 0, 0.4);
+    inset 2px 2px #4c4c4c,
+    inset -2px -2px #1a1a1a,
+    0 2px 6px rgba(0, 0, 0, 0.5);
 
-  animation: slideIn 0.4s ease-out;
+  font-family: "Minecraft", monospace;
+
+  animation: slideIn 0.35s ease-out;
 }
 
-/* ICON */
+/* ICON BOX (Minecraft item slot style) */
 .mc-toast-icon {
-  font-size: 18px;
+  width: 28px;
+  height: 28px;
+
+  background-image: url("/images/netherite-boots.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  image-rendering: pixelated;
+
+  flex-shrink: 0;
 }
 
-/* TEXT */
+/* TEXT WRAPPER */
 .mc-toast-content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
-/* TITLE (YELLOW like Minecraft) */
+/* TITLE (Minecraft yellow EXACT) */
 .mc-toast-title {
-  color: #ffd700;
-  font-size: 13px;
-  font-weight: bold;
+  color: styles.$color-font-primary-yellow;
+  font-size: 15px;
+  font-weight: normal;
+  letter-spacing: 0.3px;
 }
 
 /* BODY */
 .mc-toast-body {
-  color: white;
+  color: #ffffff;
   font-size: 12px;
+  opacity: 0.9;
 }
 
-/* ANIMATION */
+/* SLIDE ANIMATION (Minecraft style feel) */
 @keyframes slideIn {
   from {
     transform: translateX(-120%);

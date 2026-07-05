@@ -1,32 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { playSound } from "../../utils/audioSystem";
+import { useToastStore } from "../../Experience/stores/toastStore";
+import "./AchievementToast.scss";
 
-const AchievementToast = ({ trigger }) => {
-  const [show, setShow] = useState(false);
+const AchievementToast = () => {
+  const { showAchievementToast, hideAchievementToast } = useToastStore();
 
   useEffect(() => {
-    if (!trigger) return;
+    if (!showAchievementToast) return;
 
     const timer = setTimeout(() => {
-      setShow(true);
       playSound("RareAchievement");
-    }, 2000); // 🔥 2 sec AFTER ENTER WORLD
+    }, 200); // 🔥 2 sec AFTER ENTER WORLD
 
     const hideTimer = setTimeout(() => {
-      setShow(false);
-    }, 7000);
+      hideAchievementToast();
+    }, 5000);
 
     return () => {
       clearTimeout(timer);
       clearTimeout(hideTimer);
     };
-  }, [trigger]);
+  }, [showAchievementToast, hideAchievementToast]);
 
-  if (!show) return null;
+  if (!showAchievementToast) return null;
 
   return (
     <div className="mc-toast">
-      <div className="mc-toast-icon">✨</div>
+      <div className="mc-toast-icon"></div>
       <div className="mc-toast-content">
         <div className="mc-toast-title">Achievement Made!</div>
         <div className="mc-toast-body">Visitor!</div>
