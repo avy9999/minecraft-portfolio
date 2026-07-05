@@ -165,13 +165,15 @@ const Experience = () => {
   const mouseOffset = useRef({ x: 0, y: 0 });
 
   const { isModalOpen } = useModalStore();
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  const inputMultiplier = isMobile ? 2.5 : 1;
 
   /* ---------------- INPUT ---------------- */
 
   useEffect(() => {
     const handleWheel = (e) => {
       if (isModalOpen) return;
-      progressRef.current.target += e.deltaY * scrollSpeed;
+      progressRef.current.target += e.deltaY * scrollSpeed * inputMultiplier;
     };
 
     const handlePointerDown = () => {
@@ -181,7 +183,7 @@ const Experience = () => {
 
     const handlePointerMove = (e) => {
       if (!isSwiping.current) return;
-      progressRef.current.target += e.movementY * scrollSpeed;
+      progressRef.current.target += e.movementY * scrollSpeed * inputMultiplier;
     };
 
     const handlePointerUp = () => {
