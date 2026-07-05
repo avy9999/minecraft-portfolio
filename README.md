@@ -38,13 +38,42 @@ This project transforms a traditional portfolio into an interactive, game-like e
 ## 📁 Project Structure
 
 ```bash
-/src
-├── components
-├── Experience
-├── assets
-├── shaders
-├── styles
-└── utils
+portfolio/
+├── dist/
+├── node_modules/
+├── public/
+│ ├── audio/
+│ ├── basis/
+│ ├── cubemap/
+│ ├── fonts/
+│ ├── images/
+│ ├── svgs/
+│ ├── favicon.svg
+│ ├── icons.svg
+│ ├── mineT-transformed.glb
+│ └── mineT-v1.glb
+│
+├── src/
+│ ├── assets/
+│ ├── components/
+│ ├── data/
+│ ├── Experience/
+│ ├── style/
+│ ├── utils/
+│ ├── App.jsx
+│ ├── App.scss
+│ ├── index.scss
+│ └── main.jsx
+│
+├── tools/
+├── .gitignore
+├── .oxlintrc.json
+├── index.html
+├── kickbacks.vsix
+├── package.json
+├── package-lock.json
+├── README.md
+└── vite.config.js
 ```
 ---
 
