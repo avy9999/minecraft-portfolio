@@ -1,0 +1,77 @@
+@use "../../index.scss" as styles;
+
+.mc-achievements {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mc-achievement-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding: 14px;
+
+  background: styles.$color-base-dark-gray-three;
+
+  border: 2px solid #000;
+  border-radius: 6px;
+
+  box-shadow:
+    inset 4px 4px #4c4c4c,
+    inset -4px -4px #1a1a1a;
+
+  transition: 0.15s ease;
+}
+
+.mc-achievement-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    inset 4px 4px #5d5d5d,
+    inset -4px -4px #111,
+    0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.mc-achievement-icon {
+  width: 72px;
+  height: 72px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.mc-achievement-icon img {
+  width: 56px;
+  height: 56px;
+
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.mc-achievement-info {
+  flex: 1;
+}
+
+.mc-achievement-title {
+  font-family: "Minecraft";
+  color: styles.$color-font-primary-yellow;
+  font-size: 18px;
+
+  margin-bottom: 8px;
+}
+
+.mc-achievement-description {
+  font-family: "Minecraft";
+  color: white;
+
+  line-height: 1.6;
+  font-size: 13px;
+
+  opacity: 0.9;
+}
