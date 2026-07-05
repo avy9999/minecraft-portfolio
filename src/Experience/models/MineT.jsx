@@ -9,10 +9,45 @@ import { useGLTF } from '@react-three/drei'
 import { useGLTFWithKTX2 } from '../utils/useGLTFWithKTX2';
 import { fixMinecraftMaterials } from '../utils/fixMinecraftMaterials';
 import * as THREE from "three";
+import { useModalStore } from '../stores/modalStore';
+import About from '../../components/About/About';
+import Connect from '../../components/Connect/Connect';
+import Certifications from '../../components/Certifications/Certifications';
+import Experiences from '../../components/Experiences/Experiences';
+import Skills from '../../components/Skills/Skills';
+import Projects from '../../components/Projects/Projects';
+import Achievements from '../../components/Achievements/Achievements';
 
 export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
   const { nodes, materials } = useGLTFWithKTX2('/mineT-v1.glb');
   const [hoveredMesh, setHoveredMesh] = useState(null);
+
+  const { openModal } = useModalStore();
+
+  const handleClick = (elementID) => {
+    if(elementID === "face"){
+      openModal("About me", <About/>, elementID);
+    }
+    else if(elementID === "connect"){
+      openModal("Connect Me 😊", <Connect/>, elementID);
+    }
+    else if(elementID === "exp"){
+      openModal("Experiences", <Experiences/>, elementID);
+    }
+    else if(elementID === "projects"){
+      openModal("Projects", <Projects/>, elementID);
+    }
+    else if(elementID === "skills"){
+      openModal("Skills", <Skills/>, elementID);
+    }
+    else if(elementID === "achieve"){
+      openModal("Achievements", <Achievements/>, elementID);
+    }
+    else if(elementID === "achieve2"){
+      openModal("Certfications", <Certifications/>, elementID);
+    }
+  }
+
   const getMaterial = (elementID, progressRange, originalMaterial) => {
     const mat = originalMaterial;
 
@@ -78,6 +113,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[0.081, 0.532, 0.532]}
         onPointerOver={() => setHoveredMesh("face")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("face")}}
       />
 
       <mesh
@@ -88,6 +124,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[-0.36, -0.36, -0.03]}
         onPointerOver={() => setHoveredMesh("connect")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("connect")}}
       />
 
       <mesh
@@ -97,6 +134,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[0.026, 0.424, 0.424]}
         onPointerOver={() => setHoveredMesh("exp")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("exp")}}
       />
 
       <mesh
@@ -106,6 +144,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[0.026, 0.425, 0.425]}
         onPointerOver={() => setHoveredMesh("projects")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("projects")}}
       />
 
       <mesh
@@ -115,6 +154,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[0.026, 0.426, 0.426]}
         onPointerOver={() => setHoveredMesh("skills")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("skills")}}
       />
 
       <mesh
@@ -124,6 +164,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[0.035, 0.395, 0.395]}
         onPointerOver={() => setHoveredMesh("achieve")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("achieve")}}
       />
 
       <mesh
@@ -133,6 +174,7 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
         scale={[0.035, 0.395, 0.395]}
         onPointerOver={() => setHoveredMesh("achieve2")}
         onPointerOut={() => setHoveredMesh(null)}
+        onClick={()=>{handleClick("achieve2")}}
       />
       <mesh geometry={nodes.Text007.geometry} material={materials['Material.015']} position={[-9.121, 2.944, 7.493]} rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={0.259} />
       <mesh geometry={nodes['minecraft_block-allium'].geometry} material={materials['minecraft_block-allium']} position={[-14.609, 0.452, 8.092]} rotation={[1.576, 0.001, 1.574]} />

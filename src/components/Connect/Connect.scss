@@ -1,0 +1,76 @@
+@use "../../index.scss" as styles;
+
+/* NO BACKGROUND — CLEAN FLOATING TEXT */
+.mc-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 20px;
+  gap: 20px;
+}
+
+/* TEXT ONLY */
+.mc-contact-text {
+  text-align: center;
+  color: white;
+
+  h2 {
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+}
+
+/* GRID OF 1x1 BUTTONS */
+.mc-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 44px);
+  gap: 12px;
+}
+
+/* PIXEL BUTTON */
+.mc-social-btn {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: styles.$color-base-dark-gray;
+
+  background-color: styles.$color-base-gray;
+
+  border: 2px solid styles.$color-base-dark-gray-four;
+
+  box-shadow: inset 2px 2px #ffffffc0,
+    inset -2px -2px #323232c0;
+
+  transition: all 0.15s ease;
+
+  text-decoration: none;
+
+  &:hover {
+    background-color: styles.$color-base-green;
+    border: 2px solid white;
+    color: white;
+
+    box-shadow: inset 2px 2px #53d95ac0,
+      inset -2px -2px #118316c0;
+
+    cursor: pointer;
+  }
+}
+
+/* PIXEL ICON LOOK */
+.mc-icon {
+  width: 20px;
+  height: 20px;
+
+  image-rendering: pixelated;
+}

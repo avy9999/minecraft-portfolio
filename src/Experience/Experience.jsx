@@ -7,6 +7,7 @@ import * as THREE from "three";
 
 import Model from "./models/MineT";
 import cameraKeyframes from "../data/cameraKeyframes.json";
+import { useModalStore } from './stores/modalStore';
 
 const CAMERA_POS_SMOOTH = 0.08;
 const CAMERA_ROT_SMOOTH = 0.08;
@@ -195,10 +196,13 @@ const Experience = () => {
     const isSwiping = useRef(false);
     const mouseOffset = useRef(new THREE.Vector3());
 
+    const {isModalOpen} = useModalStore();
+
 
     useEffect(() => {
 
         const handleWheel = (e) => {
+            if (isModalOpen) return;
             targetScrollProgress.current = THREE.MathUtils.clamp(
                 targetScrollProgress.current + e.deltaY * scrollSpeed * 0.5,
                 0,
@@ -207,6 +211,7 @@ const Experience = () => {
         };
 
         const handlePointerDown = () => {
+            if (isModalOpen) return;
             isSwiping.current = true;
         };
 
@@ -237,9 +242,9 @@ const Experience = () => {
 
         window.addEventListener("wheel", handleWheel);
         window.addEventListener("mousemove", handleMouseMove);
-        // window.addEventListener("pointerdown", handlePointerDown);
-        // window.addEventListener("pointermove", handlePointerMove);
-        // window.addEventListener("pointerup", handlePointerUp);
+        window.addEventListener("pointerdown", handlePointerDown);
+        window.addEventListener("pointermove", handlePointerMove);
+        window.addEventListener("pointerup", handlePointerUp);
 
         return () => {
             window.removeEventListener("wheel", handleWheel);
@@ -249,7 +254,7 @@ const Experience = () => {
             window.removeEventListener("pointerup", handlePointerUp);
         };
 
-    }, []);
+    }, [isModalOpen]);
 
   return (
     <>
