@@ -2,7 +2,6 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 
 import {
-  CameraControls,
   OrbitControls,
   Environment,
   PerspectiveCamera,
@@ -21,7 +20,7 @@ const MOUSE_SMOOTH = 0.12;
 /* ---------------- CAMERA SCENE ---------------- */
 
 const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
-  const [pulseIntensity, setPulseIntensity] = useState(0);
+  const [pulseIntensity] = useState(0);
 
   const getInterpolatedFrame = (progress) => {
     if (!cameraKeyframes.length) return null;
@@ -60,18 +59,15 @@ const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
   useFrame((state) => {
     if (!camera?.current) return;
 
-    // pulse effect
-    setPulseIntensity((Math.sin(state.clock.elapsedTime * 3) + 1) / 2);
+    /* ---------------- SMOOTH INFINITE SCROLL ---------------- */
 
-    /* ---------------- INFINITE SCROLL CORE ---------------- */
+    const p = progressRef.current;
 
-    const raw = progressRef.current;
+    progressRef.current.current +=
+      (progressRef.current.target - progressRef.current.current) * 0.03;
 
-    const smooth =
-      (progressRef.current +=
-        (progressRef.target - progressRef.current) * 0.03);
+    const smooth = progressRef.current.current;
 
-    // wrap ONLY for camera sampling (no reset, no clamp)
     const progressLooped = THREE.MathUtils.euclideanModulo(smooth, 1);
 
     const frame = getInterpolatedFrame(progressLooped);
@@ -104,8 +100,7 @@ const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
       camera.current.quaternion.slerp(frame.quaternion, CAMERA_ROT_SMOOTH);
     }
 
-    // expose to model
-    progressRef.looped = progressLooped;
+    progressRef.current.looped = progressLooped;
   });
 
   return (
@@ -140,7 +135,10 @@ const Scene = ({ camera, progressRef, recordMode, mouseOffset }) => {
       />
 
       <Suspense fallback={null}>
-        <Model progress={progressRef.looped || 0} pulseIntensity={1} />
+        <Model
+          progress={progressRef.current.looped || 0}
+          pulseIntensity={1}
+        />
       </Suspense>
     </>
   );
@@ -154,14 +152,15 @@ const Experience = () => {
 
   const RECORD_MODE = false;
 
-  /* ---------------- INFINITE SCROLL STATE ---------------- */
+  /* ---------------- FIXED REF STRUCTURE ---------------- */
 
-  const progressRef = useRef(0);
-  progressRef.target = 0;
+  const progressRef = useRef({
+    current: 0,
+    target: 0,
+    looped: 0,
+  });
 
   const scrollSpeed = 0.00003;
-  const lerpFactor = 0.03;
-
   const isSwiping = useRef(false);
   const mouseOffset = useRef({ x: 0, y: 0 });
 
@@ -172,8 +171,7 @@ const Experience = () => {
   useEffect(() => {
     const handleWheel = (e) => {
       if (isModalOpen) return;
-
-      progressRef.target += e.deltaY * scrollSpeed;
+      progressRef.current.target += e.deltaY * scrollSpeed;
     };
 
     const handlePointerDown = () => {
@@ -183,8 +181,7 @@ const Experience = () => {
 
     const handlePointerMove = (e) => {
       if (!isSwiping.current) return;
-
-      progressRef.target += e.movementY * scrollSpeed;
+      progressRef.current.target += e.movementY * scrollSpeed;
     };
 
     const handlePointerUp = () => {
