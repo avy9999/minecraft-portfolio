@@ -134,3 +134,13 @@ Please give proper credit if you use or modify any part of it.
 ## ❤️ Acknowledgements
 
 Special thanks to the **Three.js** and **React Three Fiber** communities for enabling powerful immersive web experiences.
+
+---
+
+## 📦 Assets & Credits
+
+This project uses icon assets from:
+
+- 🧩 **Icons8** → https://icons8.com/icons/set/browser  
+- 🎨 **Flaticon** → https://www.flaticon.com/free-icons  
+> All assets belong to their respective creators and are used for educational / portfolio purposes only.
