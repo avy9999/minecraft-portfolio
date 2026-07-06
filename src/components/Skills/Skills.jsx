@@ -1,6 +1,6 @@
 import "./Skills.scss";
 import { useState } from "react";
-import { skillData } from "./skillData";
+import { skillData } from "./SkillData.js";
 
 const Skills = () => {
   const [hovered, setHovered] = useState(null);
