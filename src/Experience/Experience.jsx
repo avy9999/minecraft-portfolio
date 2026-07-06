@@ -170,7 +170,7 @@ const Experience = () => {
 
   const { isModalOpen } = useModalStore();
   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-  const inputMultiplier = isMobile ? 2.5 : 1;
+  const inputMultiplier = isMobile ? 3 : 1;
 
   /* ---------------- INPUT ---------------- */
 

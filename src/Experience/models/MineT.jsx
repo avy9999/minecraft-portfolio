@@ -22,9 +22,11 @@ export default function Model({progress = 0, pulseIntensity = 0, ...props}) {
   const { nodes, materials } = useGLTFWithKTX2('/mineT-v1.glb');
   const [hoveredMesh, setHoveredMesh] = useState(null);
 
-  const { openModal } = useModalStore();
+  const { openModal, isModalOpen } = useModalStore();
 
   const handleClick = (elementID) => {
+    if (isModalOpen) return;
+
     if(elementID === "face"){
       openModal("About me", <About/>, elementID);
     }

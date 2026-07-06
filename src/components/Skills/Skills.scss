@@ -1,0 +1,304 @@
+@use "../../index.scss" as styles;
+
+.mc-skills {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+}
+
+/* CATEGORY CARD */
+.mc-skill-category {
+  width: min(900px, 95%);
+  background: styles.$color-base-dark-gray-three;
+
+  border: 2px solid #000;
+  border-radius: 6px;
+
+  box-shadow:
+    inset 4px 4px #4c4c4c,
+    inset -4px -4px #1a1a1a;
+
+  padding: 16px;
+
+  position: relative;
+}
+
+/* CATEGORY HEADER */
+.mc-category-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 12px;
+}
+
+.mc-category-icon {
+  width: 56px;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #2a2a2a;
+
+  border: 2px solid #000;
+  border-radius: 4px;
+
+  box-shadow:
+    inset 2px 2px #4c4c4c,
+    inset -2px -2px #1a1a1a;
+}
+
+.mc-category-icon img {
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+}
+
+.mc-category-title {
+  font-family: "Minecraft";
+  font-size: 16px;
+  color: styles.$color-font-primary-yellow;
+}
+
+.mc-tree-line {
+  position: relative;
+  height: 18px;
+}
+
+.mc-tree-line-vertical {
+  position: absolute;
+  left: 24px;
+  top: 0;
+
+  width: 2px;
+  height: 18px;
+
+  background: #7a7a7a;
+  box-shadow: 0 1px #2d2d2d;
+}
+
+.mc-tree-line-horizontal {
+  position: absolute;
+  left: 24px;
+  top: 18px;
+
+  width: calc(100% - 48px);
+  height: 2px;
+
+  background: #7a7a7a;
+  box-shadow: 0 1px #2d2d2d;
+}
+
+/* SKILL ROW */
+.mc-skill-row {
+  display: grid;
+  gap: 18px;
+  padding-top: 12px;
+}
+
+/* SKILL ITEM WRAPPER */
+.mc-skill-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* CONNECTOR TO NODE */
+.mc-item-connector {
+  width: 2px;
+  height: 14px;
+  background: #7a7a7a;
+  box-shadow: 0 1px #2d2d2d;
+  margin-bottom: 6px;
+  transition:
+        box-shadow .15s;
+
+}
+
+.active-node {
+
+    + .mc-item-connector{
+
+        background:#f8de62;
+
+        box-shadow:
+        0 0 8px rgba(255,220,70,.5);
+
+    }
+
+}
+
+/* NODE */
+.mc-skill-node {
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: styles.$color-base-dark-gray-three;
+
+  border: 2px solid #000;
+  border-radius: 4px;
+
+  box-shadow:
+    inset 3px 3px #4c4c4c,
+    inset -3px -3px #1a1a1a;
+
+  cursor: pointer;
+  transition:
+    transform .18s ease,
+    opacity .18s ease,
+    box-shadow .18s ease;
+
+  position: relative;
+}
+
+.mc-skill-node.active-node {
+
+  transform:
+    translateY(-3px)
+    scale(1.08);
+
+  box-shadow:
+      inset 3px 3px #5f5f5f,
+      inset -3px -3px #151515,
+      0 0 12px rgba(255,220,70,.45);
+
+  z-index: 5;
+}
+
+.mc-skill-node:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.08);
+
+    box-shadow:
+        inset 3px 3px #666,
+        inset -3px -3px #111,
+        0 6px 12px rgba(0,0,0,.45);
+}
+
+/* ICON */
+.mc-skill-node img {
+  width: 34px;
+  height: 34px;
+  image-rendering: pixelated;
+}
+
+/* TOOLTIP */
+.mc-skill-tooltip {
+  position: absolute;
+  top: -38px;
+  visibility: hidden;
+
+  opacity:0;
+  
+  transform:
+    translate(-50%,6px);
+
+  transition:
+    opacity .15s ease,
+    transform .15s ease,
+    visibilty .15s;
+
+
+  padding: 6px 10px;
+
+  background: styles.$color-base-dark-gray-three;
+  border: 2px solid #000;
+  border-radius: 4px;
+
+  box-shadow:
+    inset 3px 3px #4c4c4c,
+    inset -3px -3px #1a1a1a;
+
+  font-family: "Minecraft";
+  font-size: 12px;
+  color: white;
+
+  white-space: nowrap;
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+.mc-skill-category.active-category .mc-skill-node {
+  opacity: .35;
+  transition: .18s;
+}
+
+.mc-skill-category.active-category .mc-skill-node.active-node {
+  opacity: 1;
+}
+
+.mc-skill-item.active-item .mc-item-connector {
+  background: #f8de62;
+
+  box-shadow:
+    0 0 10px rgba(255, 220, 90, 0.6);
+
+  transition: 0.2s ease;
+}
+
+.mc-skill-category.active-category .mc-tree-line-horizontal {
+  background: #f8de62;
+
+  box-shadow:
+    0 0 12px rgba(255, 220, 90, 0.5);
+
+  opacity: 1;
+
+  transition: 0.2s ease;
+}
+
+.mc-skill-category.active-category .mc-tree-line-vertical {
+  background: #f8de62;
+
+  box-shadow:
+    0 0 10px rgba(255, 220, 90, 0.5);
+
+  transition: 0.2s ease;
+}
+
+.mc-skill-category.active-category {
+  transform: scale(1.01);
+  transition: 0.2s ease;
+}
+
+.active-category .mc-category-title {
+  color: #fff36a;
+  text-shadow: 0 0 6px rgba(255, 230, 80, .4);
+}
+
+.active-item .mc-item-connector{
+
+    background:#f8de62;
+
+    box-shadow:
+    0 0 10px rgba(255,220,70,.45);
+}
+
+.active-category .mc-category-icon{
+
+    transform:scale(1.06);
+
+    box-shadow:
+        inset 3px 3px #666,
+        inset -3px -3px #111,
+        0 0 12px rgba(255,220,70,.25);
+
+}
+
+.active-node .mc-skill-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}

@@ -1,0 +1,78 @@
+@use "../../index.scss" as styles;
+
+.mc-certifications {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mc-certification-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 10px 14px;
+
+  background: styles.$color-base-dark-gray-three;
+
+  border: 2px solid #000;
+  border-radius: 6px;
+
+  box-shadow:
+    inset 4px 4px #4c4c4c,
+    inset -4px -4px #1a1a1a;
+
+  transition: 0.15s ease;
+}
+
+.mc-certification-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    inset 4px 4px #5d5d5d,
+    inset -4px -4px #111,
+    0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.mc-certification-icon {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.15s ease;
+}
+
+.mc-certification-icon:hover {
+  transform: scale(1.1);
+}
+
+.mc-certification-icon img {
+  width: 40px;
+  height: 40px;
+
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.mc-certification-title {
+  flex: 1;
+
+  font-family: "Minecraft";
+  color: styles.$color-font-primary-yellow;
+  font-size: 15px;
+  line-height: 1.4;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: color 0.15s ease;
+}
+
+.mc-certification-title:hover {
+  color: #fff6a3;
+}
