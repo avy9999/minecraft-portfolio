@@ -91,7 +91,14 @@ const LoadingScreen = () => {
                     </div>
 
                     <div className="loading-gif-container">
-                    <img src="/images/loading.gif" className="loading-gif" />
+                    <video
+                      src="/images/loading.mp4"
+                      className="loading-gif"
+                      autoPlay
+                      muted
+                      playsInline
+                      aria-label="Minecraft loading animation"
+                    />
                     </div>
 
                     <div className={`instructions-container ${isRevealed ? "revealed" : ""}`}>
