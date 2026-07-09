@@ -1,5 +1,5 @@
-import { useState } from "react";
 import "./App.scss";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import Experience from "./Experience/Experience";
 import Modal from "./components/Modal/Modal";
@@ -15,6 +15,7 @@ function App() {
       <AudioToggleButton />
       <Modal />
       <Experience />
+      <SpeedInsights />
     </>
   );
 }
