@@ -8,6 +8,22 @@ import {
 const Projects = () => {
   const projects = [
     {
+      title: "AI Video Dubber",
+      description:
+        "AI Video Dubber is an end-to-end AI-powered video dubbing platform that automatically transcribes, translates, and generates dubbed speech for multilingual videos while preserving speaker identity, conversation flow, and audio-video synchronization.",
+      image: "/images/architecture.webp",
+      github: "https://github.com/avy9999/ai-video-dubber",
+      live: null,
+      tech: [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Python 3.11",
+        "FastAPI",
+        "FFmpeg",
+      ],
+    },
+    {
       title: "Minecraft Portfolio",
       description:
         "An immersive Minecraft-inspired 3D portfolio built with React Three Fiber and Three.js. Explore a fully interactive world showcasing my projects, skills, and creativity through custom animations, smooth camera controls, and a unique game-like experience.",
